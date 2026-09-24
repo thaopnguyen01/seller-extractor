@@ -99,7 +99,7 @@
       color: #333;
     }
 
-    .specs {
+    .specs, .workspaces {
       background: white;
       padding: 40px;
       border-radius: 12px;
@@ -107,7 +107,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .specs h2 {
+    .specs h2, .workspaces h2 {
       color: #667eea;
       margin-bottom: 30px;
       font-size: 2em;
@@ -203,8 +203,13 @@
 
     .supported h2 {
       color: #667eea;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       font-size: 2em;
+    }
+
+    .supported > p {
+      color: #666;
+      margin-bottom: 25px;
     }
 
     .regions {
@@ -260,8 +265,48 @@
       border-radius: 4px;
       margin-top: 10px;
       font-family: 'Courier New', monospace;
-      font-size: 0.9em;
+      font-size: 0.85em;
       color: #667eea;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .workspace-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .workspace-table th, .workspace-table td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95em;
+    }
+
+    .workspace-table th {
+      color: #667eea;
+      font-size: 0.9em;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .workspace-table td {
+      color: #444;
+    }
+
+    .note-box {
+      background: #fff7e6;
+      border-left: 4px solid #FF9900;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      color: #6b5300;
+      font-size: 0.95em;
+    }
+
+    .note-box strong {
+      color: #4d3d00;
     }
 
     footer {
@@ -302,6 +347,8 @@
       header p { font-size: 1em; }
       .cta-button { padding: 12px 30px; font-size: 1em; }
       .specs-grid, .regions { grid-template-columns: 1fr; }
+      .workspace-table { font-size: 0.85em; }
+      .workspace-table th, .workspace-table td { padding: 8px; }
     }
   </style>
 </head>
@@ -309,9 +356,9 @@
   <div class="container">
     <header>
       <h1>🏪 Seller Extractor</h1>
-      <p>Extract product & seller data instantly. Works with Google Sheets for seamless data collection.</p>
+      <p>Extract seller, listing, and contact data across 10 marketplaces & platforms — then auto-fills your team's Google Sheets workspaces instantly.</p>
       <button class="cta-button" onclick="downloadExtension()">
-        ⬇️ Download Extension (v1.0.10)
+        ⬇️ Download Extension (v1.1.0)
       </button>
       <span class="version-badge">Latest Release</span>
     </header>
@@ -319,32 +366,32 @@
     <div class="features">
       <div class="feature-card">
         <h3>⚡ Complete Data Extraction</h3>
-        <p>Extracts <strong>Listing ID, Product URL, Title, Seller Name, Seller ID, and Storefront URL</strong> - everything you need!</p>
+        <p>Extracts <strong>Listing ID, Product URL, Title, Seller Name, Seller ID, and Storefront URL</strong> across every supported platform — plus contact details where relevant.</p>
       </div>
 
       <div class="feature-card">
-        <h3>📋 Copy Row JSON</h3>
-        <p>One-click copy of all data as JSON. Perfect for <strong>pasting into Google Sheets</strong> with instant auto-fill!</p>
+        <h3>📞 Contact Info Parsing</h3>
+        <p>Pulls <strong>Email, Phone/WhatsApp, Telegram, Snapchat, Instagram, and Associated URLs</strong> out of descriptions and bios — including numbers hidden behind emoji obfuscation like <code>2️⃣1️⃣4️⃣</code>.</p>
       </div>
 
       <div class="feature-card">
-        <h3>🌍 5 Platforms Supported</h3>
-        <p>Works on <strong>amazon.com, amazon.co.uk, amazon.ca, amazon.co.jp, and walmart.ca</strong> - truly global reach.</p>
+        <h3>🌍 10 Platforms Supported</h3>
+        <p>Amazon (4 regions), Walmart.ca, Alibaba, AliExpress (US + EU locales), TikTok (video/photo/profile), and LinkedIn Ad Library.</p>
+      </div>
+
+      <div class="feature-card">
+        <h3>📋 Single & Bulk Copy</h3>
+        <p><strong>Copy Row JSON</strong> for one listing, or <strong>Copy All Open Tabs</strong> to grab every open tab on the same platform at once — for true bulk research.</p>
       </div>
 
       <div class="feature-card">
         <h3>🎯 Floating Notification</h3>
-        <p>Auto-appears on product pages with compact design. Shows key seller info instantly, <strong>no popup needed!</strong></p>
+        <p>Auto-appears on product, profile, and ad pages with compact key info shown instantly — <strong>no popup click needed!</strong></p>
       </div>
 
       <div class="feature-card">
-        <h3>🔗 Smart Seller Links</h3>
-        <p>Direct access to seller storefronts with one click. Proper handling for Amazon-direct and third-party sellers.</p>
-      </div>
-
-      <div class="feature-card">
-        <h3>📊 Google Sheets Integration</h3>
-        <p>Paste JSON into any cell and script auto-fills <strong>all columns correctly</strong> - zero manual entry needed!</p>
+        <h3>🗂️ Workspace-Aware Sheets Sync</h3>
+        <p>Paste JSON into any cell and a companion script auto-detects the platform and routes every field to <strong>the correct column for that specific team workspace</strong> — with zero manual entry.</p>
       </div>
     </div>
 
@@ -352,84 +399,162 @@
       <h2>✨ Key Features</h2>
       <div class="specs-grid">
         <div class="spec-item">
-          <h4>✓ 6 Data Fields</h4>
-          <p>Listing ID, Product URL, Title, Seller Name, Seller ID, Seller URL all extracted automatically.</p>
+          <h4>✓ Rich Data Fields</h4>
+          <p>Listing ID, Product/Listing URL (raw + clean), Title, Description, Seller Name/ID/URL, and full contact breakdown — all extracted automatically.</p>
         </div>
 
         <div class="spec-item">
-          <h4>✓ Copy Row JSON</h4>
-          <p>One-click copy all data as JSON - perfect for spreadsheet workflows and bulk processing.</p>
+          <h4>✓ Copy Row JSON & Batch Copy</h4>
+          <p>Single-click copy for one listing, or grab every open tab on a platform at once for bulk pasting.</p>
         </div>
 
         <div class="spec-item">
           <h4>✓ Auto-Paste to Sheets</h4>
-          <p>Paste JSON into Google Sheets and script auto-fills all correct columns - no manual work!</p>
+          <p>Paste JSON (single object or array) into Google Sheets and the script fills every correct column — no manual work.</p>
         </div>
 
         <div class="spec-item">
           <h4>✓ Floating Notification</h4>
-          <p>Compact notification appears automatically on product pages with essential info and copy buttons.</p>
+          <p>Compact notification appears automatically on supported pages with essential info and one-click copy buttons.</p>
         </div>
 
         <div class="spec-item">
-          <h4>✓ 5 Platforms</h4>
-          <p>amazon.com, amazon.co.uk, amazon.ca, amazon.co.jp, and walmart.ca all fully supported.</p>
+          <h4>✓ 10 Platforms</h4>
+          <p>Amazon, Walmart, Alibaba, AliExpress (multi-region), TikTok, and LinkedIn — all fully supported.</p>
         </div>
 
         <div class="spec-item">
-          <h4>✓ Fully Dynamic</h4>
-          <p>Paste JSON anywhere in Google Sheets - script knows exactly where each field should go!</p>
+          <h4>✓ Formula-Safe Sheet Sync</h4>
+          <p>Knows which columns in each workspace are live ARRAYFORMULAs and skips writing to them, so it never breaks an existing formula.</p>
         </div>
       </div>
     </div>
 
     <div class="supported">
       <h2>🌐 Supported Platforms</h2>
+      <p>Product pages, seller/supplier pages, creator profiles, and ad listings — across e-commerce and social platforms.</p>
       <div class="regions">
         <div class="region">amazon.com</div>
         <div class="region">amazon.co.uk</div>
         <div class="region">amazon.ca</div>
         <div class="region">amazon.co.jp</div>
         <div class="region">walmart.ca</div>
+        <div class="region">alibaba.com</div>
+        <div class="region">aliexpress.com<br><span style="font-size:0.75em;opacity:0.85;">(+ ES/FR/DE)</span></div>
+        <div class="region">aliexpress.us</div>
+        <div class="region">tiktok.com<br><span style="font-size:0.75em;opacity:0.85;">video · photo · profile</span></div>
+        <div class="region">linkedin.com<br><span style="font-size:0.75em;opacity:0.85;">Ad Library</span></div>
       </div>
     </div>
 
     <div class="scenarios">
       <h2>📊 What It Extracts</h2>
+
       <div class="scenario-item">
-        <h4>🔶 Complete Product Data</h4>
+        <h4>🔶 Amazon — Complete Product Data</h4>
         <p>All essential information in one click:</p>
-        <div class="result">
-          Listing ID: B09ZRN1N3Z<br>
-          Product URL: https://www.amazon.com/dp/B09ZRN1N3Z<br>
-          Title: Premium Supplement - 90 Capsules<br>
-          Seller Name: Jiya Enterprise Limited<br>
-          Seller ID: A1T1LYOBFB0EUJ<br>
-          Seller URL: https://www.amazon.com/shops/A1T1LYOBFB0EUJ
-        </div>
+        <div class="result">Listing ID: B09ZRN1N3Z
+Product URL: https://www.amazon.com/dp/B09ZRN1N3Z
+Title: Premium Supplement - 90 Capsules
+Seller Name: Jiya Enterprise Limited
+Seller ID: A1T1LYOBFB0EUJ
+Seller URL: https://www.amazon.com/shops/A1T1LYOBFB0EUJ</div>
       </div>
 
       <div class="scenario-item">
-        <h4>🟢 Amazon Direct Sales</h4>
-        <p>Proper handling when Amazon is the seller:</p>
-        <div class="result">
-          Listing ID: B07XYZABC<br>
-          Product URL: https://www.amazon.com/dp/B07XYZABC<br>
-          Title: Popular Electronics Item<br>
-          Seller Name: Amazon<br>
-          Seller ID: AMAZON<br>
-          Seller URL: Amazon (store-direct)
-        </div>
+        <h4>🟠 Alibaba — Supplier & Listing Info</h4>
+        <p>Cleans up supplier badges and builds a clean storefront link automatically:</p>
+        <div class="result">Listing ID: 1601942327678 (from URL)
+Seller Name: Xiamen Zhicheng Automation Technology Co.,ltd.
+Seller ID: zcsensors
+Clean Seller URL: https://zcsensors.m.en.alibaba.com/
+Raw Listing URL: https://www.alibaba.com/product-detail/...html?spm=...</div>
       </div>
 
       <div class="scenario-item">
-        <h4>📋 Google Sheets Integration</h4>
-        <p>Click "Copy Row JSON" and paste into any Google Sheet cell:</p>
-        <div class="result">
-          Script auto-fills all columns correctly<br>
-          Works on all 5 platforms<br>
-          Paste anywhere in the row - script figures it out!
-        </div>
+        <h4>🎵 TikTok — Video, Photo & Profile Modes (Auto-Detected)</h4>
+        <p>Same extractor adapts to whichever page type it's on, and decodes obfuscated contact info hidden with emoji:</p>
+        <div class="result">Mode: video
+Listing ID: 7157964386412317953
+Handle: hyperchem2013
+User ID: 7096772416638518277 (from page's own JSON state)
+Title: "Liraglutide store at 36°F to 46°F..."
+Description: "original sound - HyperChem2013"
+
+Bio text: "2️⃣1️⃣4️⃣🍀7️⃣9️⃣6️⃣🍀4️⃣5️⃣8️⃣9️⃣"
+  → Phone: 214-796-4589 (decoded automatically)</div>
+      </div>
+
+      <div class="scenario-item">
+        <h4>💼 LinkedIn — Ad Library Listings</h4>
+        <p>Pulls the ad headline, body copy, and advertiser info — whether the advertiser is a company page or an individual profile:</p>
+        <div class="result">Content ID: 1597585136
+Advertiser: VERITY
+Page: https://www.linkedin.com/company/143692986
+Title: "Your mind has always been your edge..."
+Text: "You have always been the sharpest person in the room..."</div>
+      </div>
+
+      <div class="scenario-item">
+        <h4>📋 Bulk Copy Across Tabs</h4>
+        <p>Click <strong>"Copy All Open Tabs"</strong> and every open tab on the same platform gets bundled into a single JSON array — paste once into Sheets and it fills every row automatically.</p>
+      </div>
+    </div>
+
+    <div class="workspaces">
+      <h2>🗂️ How It Connects to Your Team's Google Sheets Workspaces</h2>
+      <p style="color:#666; margin-bottom: 20px;">
+        This extension doesn't just extract data — a companion Google Apps Script, installed once per spreadsheet, turns a pasted JSON blob into a fully-filled row in <strong>your team's actual tracking workspace</strong>, matching each workspace's own column layout exactly.
+      </p>
+
+      <table class="workspace-table">
+        <thead>
+          <tr>
+            <th>Workspace</th>
+            <th>What Gets Auto-Filled</th>
+            <th>Formula-Protected Columns</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Amazon / Walmart</td>
+            <td>Product URL, Seller Name/URL, Title</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Alibaba</td>
+            <td>Raw Listing URL, Seller URL (with trailing slash), Title, Date Found</td>
+            <td>Listing ID, Listing URL</td>
+          </tr>
+          <tr>
+            <td>AliExpress US</td>
+            <td>Seller URL, Raw Listing/Seller URL, Title, Date Found</td>
+            <td>Listing ID, Listing URL</td>
+          </tr>
+          <tr>
+            <td>AliExpress EU (ES/FR/DE)</td>
+            <td>Seller URL, Raw Listing/Seller URL, Title, Date Found</td>
+            <td>Listing ID, Listing URL</td>
+          </tr>
+          <tr>
+            <td>TikTok</td>
+            <td>Raw Content Link, User ID, Associated URL, Email/Phone/Telegram/Snapchat/Instagram/Other, Title</td>
+            <td>ID Number, Content Link, Handle</td>
+          </tr>
+          <tr>
+            <td>LinkedIn</td>
+            <td>Merchant Name, Page, Associated Domain, Title, Text, Content ID/URL, Target URL, Updated At</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note-box">
+        <strong>Why some columns are skipped on purpose:</strong> several workspaces already use live <code>ARRAYFORMULA</code>s to derive things like the Listing ID or a cleaned URL directly from a raw link column. The script knows exactly which columns those are per workspace and never writes to them — so pasting new data can never silently break an existing formula.
+      </div>
+
+      <div class="note-box" style="margin-top: 14px;">
+        <strong>Setup:</strong> the script is bound to a specific Google Sheet <em>file</em>, not an individual tab — so it only needs to be pasted once per spreadsheet (Extensions → Apps Script) to work across every tab inside it. Each contract workspace (Alibaba, AliExpress US, AliExpress EU, TikTok, LinkedIn, Amazon/Walmart) keeps its own copy, since each has a different column layout.
       </div>
     </div>
 
@@ -438,25 +563,25 @@
       <div class="specs-grid">
         <div class="spec-item">
           <h4>1️⃣ Extract</h4>
-          <p>Load product page → Floating popup appears → Data automatically extracted</p>
+          <p>Load a product/profile/ad page → Floating notification appears → Data extracted automatically, including contact info</p>
         </div>
 
         <div class="spec-item">
           <h4>2️⃣ Copy JSON</h4>
-          <p>Click "Copy Row JSON" button → All data copied as JSON to clipboard</p>
+          <p>Click "Copy Row JSON" for one listing, or "Copy All Open Tabs" to bundle every open tab on that platform</p>
         </div>
 
         <div class="spec-item">
           <h4>3️⃣ Paste to Sheets</h4>
-          <p>Go to Google Sheet → Click any cell in a row → Paste JSON</p>
+          <p>Go to your team's Google Sheet workspace → Click any cell → Paste JSON</p>
         </div>
 
         <div class="spec-item">
           <h4>4️⃣ Auto-Fill</h4>
-          <p>Script detects platform → Fills all columns correctly → No manual work!</p>
+          <p>Script detects the platform and workspace layout → Fills every correct column → Skips formula-protected ones</p>
         </div>
       </div>
-      <p style="margin-top: 20px; text-align: center; color: #666;"><strong>Complete workflow in ~30 seconds per product!</strong></p>
+      <p style="margin-top: 20px; text-align: center; color: #666;"><strong>Complete workflow in seconds per listing — or a whole batch at once.</strong></p>
     </div>
 
     <div class="installation">
@@ -487,18 +612,18 @@
           <p>Click "Load unpacked" and select the extracted <strong>seller-extractor</strong> folder</p>
         </li>
       </ol>
-      <p style="margin-top: 20px; color: #666;">That's it! The extension is now installed and ready to use.</p>
+      <p style="margin-top: 20px; color: #666;">That's it! The extension is now installed and ready to use. For Sheets auto-fill, ask your team lead for the Apps Script matching your workspace.</p>
     </div>
 
     <footer>
-      <p>Made with ❤️ for e-commerce marketplace research</p>
-      <p style="font-size: 0.9em; opacity: 0.8;">Version 1.0.10 • Last updated: August 2026</p>
+      <p>Made with ❤️ for marketplace risk & compliance research</p>
+      <p style="font-size: 0.9em; opacity: 0.8;">Version 1.1.0 • Last updated: September 2026</p>
     </footer>
   </div>
 
   <script>
     function downloadExtension() {
-      const downloadUrl = 'https://github.com/thaopnguyen01/seller-extractor/releases/download/v1.0.10/seller-extractor.zip';
+      const downloadUrl = 'https://github.com/thaopnguyen01/seller-extractor/releases/download/v1.1.0/seller-extractor.zip';
       const link = document.createElement('a');
       link.href = downloadUrl;
       link.download = 'seller-extractor.zip';
